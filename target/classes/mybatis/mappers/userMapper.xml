@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+  	<select id="selectCheckLogin" resultType="User">
+  		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND USER_PWD = #{userPwd } AND IS_USER_DELETED = 'N'
+  	</select>
+  	
+  	<select id="selectUserList" resultType="User">
+	    SELECT * FROM USER_TBL ORDER BY USER_NO
+	</select>
+	
+	<select id="selectListCount" resultType="_int">
+	    SELECT COUNT(*) FROM USER_TBL
+	</select>
+	
+	<insert id="insertUser">
+		INSERT INTO USER_TBL VALUES (SEQ_USER_NO.NEXTVAL, #{userId }, #{userPwd }, #{userName }, #{userPhone }, #{userPostCode }, #{userAddress }, #{userAddressDetail }
+									, DEFAULT, #{userProfileName }, #{userProfileRename }, #{userProfilePath }, #{userProfileLength }, DEFAULT)
+	</insert>
+	
+	<select id="selectOneFindEmail" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone } AND IS_USER_DELETED = 'N'
+	</select>
+
+	<select id="selectOneById" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_ID = #{userId} AND IS_USER_DELETED = 'N'
+	</select>
+	
+	<update id="updateUser">
+		UPDATE USER_TBL SET USER_NAME = #{userName }, USER_PHONE = #{userPhone }, USER_POST_CODE = #{userPostCode }, USER_ADDRESS = #{userAddress }, USER_ADDRESS_DETAIL = #{userAddressDetail }
+							, USER_PROFILE_NAME = #{userProfileName }, USER_PROFILE_RENAME = #{userProfileRename }, USER_PROFILE_PATH = #{userProfilePath }, USER_PROFILE_LENGTH = #{userProfileLength }
+							WHERE USER_ID = #{userId }
+	</update>
+	
+	<select id="selectOneFindPwd" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone } AND USER_ID = #{userId } AND IS_USER_DELETED = 'N'
+	</select>
+	
+	<update id="deleteUser">
+		UPDATE USER_TBL SET IS_USER_DELETED = 'Y' WHERE USER_ID = #{userId }
+	</update>
+	
+	<insert id="insertKakao" parameterType="HashMap">
+		INSERT ALL INTO USER_TBL VALUES (SEQ_USER_NO.NEXTVAL, #{userId }, #{userPwd }, #{userName }, null, null, null, null
+									, DEFAULT, #{userProfileName }, #{userProfileRename }, #{userProfilePath }, #{userProfileLength }, DEFAULT)
+					INTO SOCIAL_USER_TBL VALUES (SEQ_SOCIAL_NO.NEXTVAL, #{access_token }, null, 'kakao', SEQ_USER_NO.CURRVAL)
+		SELECT * FROM DUAL
+	</insert>
+	
+	<insert id="insertNaver" parameterType="HashMap">
+		INSERT ALL INTO USER_TBL VALUES (SEQ_USER_NO.NEXTVAL, #{userId }, #{userPwd }, #{userName }, #{userPhone }, null, null, null
+									, DEFAULT, #{userProfileName }, #{userProfileRename }, #{userProfilePath }, #{userProfileLength }, DEFAULT)
+					INTO SOCIAL_USER_TBL VALUES (SEQ_SOCIAL_NO.NEXTVAL, #{access_token }, null, 'naver', SEQ_USER_NO.CURRVAL)
+		SELECT * FROM DUAL
+	</insert>
+</mapper>

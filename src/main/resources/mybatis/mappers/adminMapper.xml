@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdminMapper">
+
+	<resultMap id="adminResultMap"  type="com.bringbring.admin.domain.AdminDetails">
+		<id property="adminNo" column="ADMIN_NO"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="userNo" column="USER_No"/>
+		<result property="userPhone" column="USER_PHONE"/>
+		<result property="adminCreateDate" column="ADMIN_CREATE_DATE"/>
+		<result property="regionName" column="REGION_NAME"/>
+	</resultMap>
+
+	<insert id="insertAdmin">
+		INSERT INTO ADMIN_TBL VALUES (SEQ_ADMIN_NO.NEXTVAL, #{userNo}, #{regionNo}, #{adminOrg}, DEFAULT, DEFAULT)
+	</insert>
+
+	<insert id="insertRole">
+		INSERT INTO ROLE_TBL VALUES (SEQ_ROLE_NO.NEXTVAL, SEQ_USER_R_NO.NEXTVAL, DEFAULT)
+	</insert>
+
+	<update id="updateRole">
+		UPDATE ROLE_TBL SET USER_GRADE = 2 WHERE USER_NO = #{userNo}
+	</update>
+	
+	<update id="updateRoleDownGrade">
+		UPDATE ROLE_TBL SET USER_GRADE = 1 WHERE USER_NO = #{userNo}
+	</update>
+
+	<delete id="deleteAdmin">
+		DELETE FROM ADMIN_TBL WHERE USER_NO = #{userNo}
+	</delete>
+
+	<delete id="deleteUser">
+		DELETE FROM USER_TBL WHERE USER_NO = #{userNo}
+	</delete>
+
+	<delete id="deleteRole">
+		DELETE FROM ROLE_TBL WHERE USER_NO = #{userNo}
+	</delete>
+
+	<select id="selectAdminDetailsList" resultMap="adminResultMap">
+		SELECT a.ADMIN_NO, u.USER_ID, u.USER_PHONE, a.ADMIN_CREATE_DATE, r.REGION_NAME, u.USER_NO
+		FROM ADMIN_TBL a
+				 JOIN USER_TBL u ON a.USER_NO = u.USER_NO
+				 JOIN REGION_TBL r ON a.REGION_NO = r.REGION_NO
+	</select>
+
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM ADMiN_TBL
+	</select>
+
+	<select id="selectRoleByNo" resultType="Role">
+		SELECT * FROM ROLE_TBL WHERE USER_NO = ${userNO}
+	</select>
+
+	<select id="selectDeletedUserCount" resultType="_int">
+		SELECT COUNT(*) FROM USER_TBL WHERE IS_USER_DELETED = 'Y'
+	</select>
+
+	<select id="countAlreadyAdmin" resultType="_int">
+		SELECT COUNT(*) FROM ADMIN_TBL WHERE USER_NO = #{userNo}
+	</select>
+
+	<select id="getListCount" resultType="_int">
+		SELECT COUNT(*) FROM USER_TBL
+		<if test="searchCondition == 'all'">
+			WHERE USER_NO LIKE '%'||#{searchKeyword}||'%' OR USER_ID LIKE '%'||#{searchKeyword}||'%' OR USER_PHONE LIKE '%'||#{searchKeyword}||'%' OR IS_USER_DELETED LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'id'">
+			WHERE USER_ID LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'number'">
+			WHERE USER_NO LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'phone'">
+			WHERE USER_PHONE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'userDeleted'">
+			WHERE IS_USER_DELETED LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+
+	<select id="searchUserByKeyword" resultType="User">
+		SELECT * FROM USER_TBL
+		<if test="searchCondition == 'all'">
+			WHERE USER_NO LIKE '%'||#{searchKeyword}||'%' OR USER_ID LIKE '%'||#{searchKeyword}||'%' OR USER_PHONE LIKE '%'||#{searchKeyword}||'%' OR IS_USER_DELETED LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'id'">
+			WHERE USER_ID LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'number'">
+			WHERE USER_NO LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'phone'">
+			WHERE USER_PHONE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'userDeleted'">
+			WHERE IS_USER_DELETED LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+
+	<select id="searchAdminByKeyword" resultMap="adminResultMap">
+		SELECT a.ADMIN_NO, u.USER_ID, u.USER_PHONE, a.ADMIN_CREATE_DATE, r.REGION_NAME, u.USER_NO
+		FROM ADMIN_TBL a
+		JOIN USER_TBL u ON a.USER_NO = u.USER_NO
+		JOIN REGION_TBL r ON a.REGION_NO = r.REGION_NO
+		<if test="searchCondition == 'all'">
+			WHERE ADMIN_NO LIKE '%'||#{searchKeyword}||'%' OR USER_ID LIKE '%'||#{searchKeyword}||'%' OR USER_PHONE LIKE '%'||#{searchKeyword}||'%' OR REGION_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'id'">
+			WHERE USER_ID LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'number'">
+			WHERE ADMIN_NO LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'phone'">
+			WHERE USER_PHONE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			WHERE REGION_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+
+	<select id="getListAdminCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM ADMIN_TBL a
+		JOIN USER_TBL u ON a.USER_NO = u.USER_NO
+		JOIN REGION_TBL r ON a.REGION_NO = r.REGION_NO
+		<if test="searchCondition == 'all'">
+			WHERE ADMIN_NO LIKE '%'||#{searchKeyword}||'%' OR USER_ID LIKE '%'||#{searchKeyword}||'%' OR USER_PHONE LIKE '%'||#{searchKeyword}||'%' OR REGION_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'id'">
+			WHERE USER_ID LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'number'">
+			WHERE ADMIN_NO LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'phone'">
+			WHERE USER_PHONE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			WHERE REGION_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+
+	<select id="selectAdminByNo" resultType="Admin">
+		SELECT * FROM ADMIN_TBL WHERE USER_NO = ${userNO}
+	</select>
+</mapper>

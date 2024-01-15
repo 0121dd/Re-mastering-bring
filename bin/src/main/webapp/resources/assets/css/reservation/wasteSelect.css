@@ -1,0 +1,121 @@
+.in-progress-bar {
+    width: 20%;
+    background: #A8DF8E;
+    animation: progressBarAnimation 1s ease-in-out;
+}
+@keyframes progressBarAnimation {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 20%;
+    }
+}
+
+/* 클릭 시 색상 변경 스타일 */
+.btn.btn-outline-success.active {
+    background-color: #198754; /* 클릭 시 배경색 */
+    color: #fff; /* 클릭 시 텍스트 색상 */
+}
+.selectBox {
+    width: 300px;
+}
+.selectBtn {
+    border: none;
+    background: none;
+}
+.selectBtn > img {
+    width: 30px;
+}
+.itemList {
+    display: flex;
+    align-items: center;
+}
+
+/* 스핀 버튼 제거 */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+    width: 50px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #CCC;
+}
+#category_box {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#category_box button {
+    font-size: 18px;
+    width: 100px;
+    font-family: 'LINESeedKR-Bd';
+    height: 38px;
+}
+.fee {
+    margin-right: 20px;
+}
+#listDiv {
+    height: 500px;
+    overflow-y: auto;
+}
+#listTable {
+    width: 100%;
+    padding-right: 17px;
+
+}
+#listTable > select {
+    width: 400px;
+    margin-right: 20px;
+}
+#listTable > tr {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid #ccc;
+}
+.firstTd {
+    padding-left: 5px;
+    width: 30%;
+    display: flex;
+    align-items: center;
+}
+.secondTd {
+    width: 40%;
+    display: flex;
+    align-items: center;
+}
+.thirdTd {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.thirdTd > .listTableP {
+    height: 50%;
+}
+.fourthTd {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#listDiv-p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 1.5em;
+}
+#selectTable {
+    height: 100%;
+}
+.wasteInfoNo {
+    display: none;
+}
